@@ -1,0 +1,358 @@
+import jdk.nashorn.internal.ir.IndexNode;
+
+public class Student {
+
+	// given instructions
+    public int sno;
+    public String sname;
+
+	1. define and implement a no-argument constructor
+    public Student(){
+        sno=0;
+        this.sname=null;
+    }
+	1.a with argument constructor
+    public Student(int _sno,String _name) {
+        sno = _sno;
+        sname = _name;
+    }
+	2. define the accessor and mutator methods for sno
+    public int getSno() {
+        return sno;
+    }
+	2. the get ans set method
+    public void setSno(int sno){
+        this.sno=sno;
+    }
+
+}
+
+//5 125 32
+//1000 1024
+//1000 1000
+//
+n^3+10*2^n  == //O(2^n)
+n^2 + 2log2n == //O(n^2)
+5n*log2n+2n^2 == //O(n^2)
+1+2+3+(n-1)+n == //n*(1+n)/2
+              == //n/2+n*n/2
+             == //O(n^2)
+
+//n=1
+
+int ans=0;
+for(int i=0;j<n;i+){
+	for(int j=0;j<n;j++){
+		break;
+	}
+}
+ == //O(n)
+
+
+//第三题
+class IntArraySet{
+    private int num;//数组中的元素个数
+    private int[] data;//长度为16
+    public IntArraySet(){
+        num=0;
+        data=new int[2];
+    }
+    public IntArraySet(int size){
+        if(size>0){
+            num=0;
+            data=new int[size];
+        }
+    }
+
+//(1) (10pts) A method which adds a given element to the first available space of the data 
+array in this instance. (a) When the collection space is sufficient to hold the new element, 
+this element can be directly added to the collection. (b) Otherwise, you need to double the 
+space of the instance array. 
+Note that if the collection contains one value that equals to the given parameter 
+"element", the parameter value should NOT be added to the collection. I.e., we will NOT 
+get a collection class with duplicated values when we use this method
+    public void addNoDuplicate(int element){
+        for(int i=0;i<num;++i){
+            if(data[i]==element){
+                return;
+            }
+        }
+        if(data.length==num){
+            //store previous
+            int[] new_data=new int[data.length];
+            for(int i=0;i<num;++i){
+                new_data[i]=data[i];
+            }
+            //
+            data=new int[num*2];
+            for(int i=0;i<num;++i){
+                data[i]=new_data[i];
+            }
+        }
+        data[num]=element;
+        num++;
+    }
+
+(2) (10 pts) The following function tries to implement the equals method for IntArraySet. Will 
+this function work correctly? If so, please explain why. If not, please identify the bug and fix it. 
+(Hint: please focus on the logic.)
+    public boolean equals(Object o){
+        if(o==null){
+            return false;
+        }
+        //true
+        //!true=false
+        if(!(o instanceof IntArraySet)){
+            return false;
+        }
+        IntArraySet bag=(IntArraySet)o;
+
+        //this:[1 2 3 4]
+        //bag[1 2]
+        if(num!=bag.num){
+            return false;
+        }
+
+        for(int i=0;i<bag.num;++i){
+            if(data[i]!=bag.data[i]){
+                return false;
+            }
+        }
+        return true;
+
+    }
+    //this.equals(o)
+    //1 2 3 4
+
+
+    //
+    //addNoDuplicate(1)
+      //  addNoDuplicate(2)
+    //1 2
+    //addNoDuplicate(2)
+    //1 2
+
+
+}
+
+
+//第四题
+class IntNode{
+    private int data;
+    private IntNode link;
+    public IntNode(){
+        data=10;
+        link=null;
+    }
+    public IntNode(int _data,IntNode _link){
+        data=_data;
+        link=_link;
+    }
+//非题目包含
+    public void setData(int val){
+        this.data=val;
+    }
+
+    public void addNodeAfter(int item){
+        link=new IntNode(item,link);
+    }
+    //1->2->3->4->5
+    //this.removeNodeAfter(2)
+
+// (1) (5 pts) Implement a method to remove an element e after the current node.
+    public void removeNodeAfter(int e){
+        IntNode node=this;
+        while(node!=null){
+            if(node.link!=null){
+                if(node.link.data==e){
+                    node.link=node.link.link;
+                    break;
+                }
+            }
+            node=node.link;
+        }
+    }
+    public IntNode getLink(){
+        return link;
+    }
+    public void setLink(IntNode node){
+        this.link=node;
+    }
+What’s the time complexity of this algorithm? ___ O(n)________________
+
+    //1->2->3
+    //item=2
+
+(2) (8 pts) Given the following f2 function in IntNode class, 
+public double f2() {
+IntNode cursor;
+int num1 = 0;
+int num2 = 0;
+ 
+for (cursor = this; cursor != null; cursor = cursor.link) {
+if(cursor.data%2==1) num1+=cursor.data;
+else num2+=cursor.data;
+}
+return ((num1)*1.0/num2); 
+}
+For the above method, what’s the time complexity? 
+First, define n=____number of nodes in the linked list_____
+Then, the complexity in Big-O is _O(n)_____
+
+    public void f3(int item){
+        IntNode newnode=new IntNode();
+        newnode.setData(item);
+        IntNode preCursor=null;
+        IntNode cursor=this;
+        while(cursor!=null){
+            preCursor=cursor;
+            cursor=cursor.getLink();
+        }
+        preCursor.setLink(newnode);
+
+    }
+    //1->7->8->3->1->2
+
+    //1
+    //1->2
+    //1->4->2
+    //1->4->4->2
+    //4->4->2
+
+    //O(n)
+}
+
+//1->2->3
+First, define n=____number of nodes in the linked list_____
+//the number of nodes
+Then, the complexity in Big-O is _O(n)_____
+//O(N)
+What will be the returned result after running head.f2()?
+1.5
+//num1=12
+//8
+//head.f2()=1.5
+
+
+//Given the linked list shown in Fig.1, after running head.f3(2), What will the linked list starting 
+from head look like? Draw this linked list.
+3)This function does addToEnd()
+1->7->8->3->1->2
+
+
+//第五题
+class DNode{
+    public int data;
+    public DNode next=null;
+    public DNode prev=null;
+    public DNode(){
+
+    }
+
+}
+class DoublyLinkedListDummy{
+
+    public DNode head;
+    public DNode tail;
+
+    public DoublyLinkedListDummy(){
+        head=new DNode();
+        tail=new DNode();
+        head.next=tail;
+        tail.prev=head;
+    }
+
+// (1) (5 pts) Define and implement a function to get the actual head of the doubly linked 
+list with dummy head and tail. If the linked list is empty, return null.
+    public DNode getHead(){
+        if(head.next==tail)
+            return null;
+        else
+        	return head.next;
+    }
+
+//(2) (10 pts) A method to return the actual number of nodes in a doubly linked with 
+dummy head and tail.
+    public int listLength(){
+        DNode node=head.next;
+        int count=0;
+        while(node!=tail){
+            count++;
+            node=node.next;
+        }
+        return count;
+    }
+	//or
+	public int listLength(){
+		int ans=0;
+		DNode<E> cursor = head.next;
+		while(cursor!=tail){
+			ans++;
+			cursor = cursor.next; 
+		}
+		return ans; 
+	}
+
+
+//题目给的
+    public void func(int element){
+        DNode newnode=new DNode();
+        newnode.data=element;
+        newnode.prev=tail.prev;
+        newnode.next=tail;
+        tail.prev.next=newnode;
+        tail.prev=newnode;
+    }
+
+}
+
+What will the doubly linked list look like after running the following code?
+题目dummy head-- 10--8--10--dummy tail
+What will the doubly linked list look like after running the following code? 
+List.func(5):10<->8<->10<->5
+
+
+//第六题
+(1) (5 pts) Describe what data structures you plan to have, write down clearly what are the 
+instances member and methods (you do not need to implement the methods).
+class Computer{
+    public String id;
+    private String cpu_model;
+    private int size;
+    public Computer next;
+
+
+};
+
+(2) (5 pts) Describe your addition and searching algorithms. (No need to write code, write down 
+pseudo-code) and explain why they meet the running time requirement.
+class ComputerList{
+
+    private Computer head;
+    //每次添加都将其添加到链表头部
+    public void add(Computer computer){
+        computer.next=head;
+        head=computer;
+    }
+
+    //查找遍历整个链表
+    public void search(String id){
+        Computer computer=head;
+        while(computer!=null){
+            if(computer.id==id){
+                //finded
+                return;
+            }
+            computer=computer.next;
+        }
+    }
+}
+
+//add
+
+
+//添加到链表的头部
+//
+
+
+//search total linked list
